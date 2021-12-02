@@ -7,6 +7,7 @@ import {
   NotificationProvider,
   darkTheme,
   GlobalStyles,
+  VoiceFocusProvider,
   MeetingProvider
 } from 'amazon-chime-sdk-component-library-react';
 import meetingConfig from './meetingConfig';
@@ -19,11 +20,15 @@ const App = () => {
   return (
     <Router>
       <AppStateProvider>
+        {/* <VoiceFocusProvider> */}
         <MeetingProvider {...meetingConfigValue}>
-          <Theme>
+          <ThemeProvider theme={lightTheme}>
+            {/* <Theme> */}
             <MeetingProviderWrapperfrom />
-          </Theme>
+            {/* </Theme> */}
+          </ThemeProvider>
         </MeetingProvider>
+        {/* </VoiceFocusProvider> */}
       </AppStateProvider>
     </Router>
   );

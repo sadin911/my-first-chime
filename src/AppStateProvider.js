@@ -25,7 +25,7 @@ const AppStateProvider = ({ children }) => {
   const [meetingMode, setMeetingMode] = useState(MeetingMode.Attendee);
   const [layout, setLayout] = useState(Layout.Gallery);
   const [localUserName, setLocalName] = useState('');
-  const [isWebAudioEnabled, setIsWebAudioEnabled] = useState(false);
+  const [isWebAudioEnabled, setIsWebAudioEnabled] = useState(true);
   const [theme, setTheme] = useState(() => {
     const storedTheme = localStorage.getItem('theme');
     return storedTheme || 'light';

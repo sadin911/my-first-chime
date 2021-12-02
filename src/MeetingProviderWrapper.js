@@ -4,8 +4,10 @@
 import React, { useEffect, useState } from 'react';
 import { MeetingMode, Layout } from './types';
 import { Route, Switch } from 'react-router-dom';
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 import {
   MeetingProvider,
+  AudioOutputControl,
   VoiceFocusProvider,
   useMeetingManager,
   DevicePermissionStatus,
@@ -24,7 +26,14 @@ import {
   LocalVideo,
   PreviewVideo,
   BackgroundBlurProvider,
-  BackgroundBlurCheckbox
+  BackgroundBlurCheckbox,
+  AudioInputControl,
+  AudioInputVFControl,
+  VideoGrid,
+  VideoTile,
+  ContentShare,
+  useContentShareControls,
+  ControlBar
 } from 'amazon-chime-sdk-component-library-react';
 import { v4 as uuidv4 } from 'uuid';
 import { DeviceSetup } from './views';
@@ -59,6 +68,7 @@ const MeetingProviderWrapper = () => {
     enableWebAudio: isWebAudioEnabled,
   };
   const { layout } = useAppState();
+
   useEffect(async () => {
 
     // permission = DevicePermissionStatus.GRANTED
@@ -87,7 +97,9 @@ const MeetingProviderWrapper = () => {
     setIsJoined(true)
   }, [])
   const { tileId, isVideoEnabled, setIsVideoEnabled, toggleVideo } = useLocalVideo();
+  const { toggleContentShare } = useContentShareControls();
   console.log(isVideoEnabled)
+
   const getMeetingProviderWrapper = () => {
     return (
       <div>
@@ -97,13 +109,32 @@ const MeetingProviderWrapper = () => {
               {isJoined ? (
                 <BackgroundBlurProvider>
                   <div>
-                    <h1>VideoTileGrid</h1>
-                    {isVideoEnabled ? 'LocalVideo is enabled' : 'LocalVideo is disabled'}
-                    <button onClick={toggleVideo}>Toggle video</button>
-                    <VideoTileGrid style={{ width: "480px", height: "320px" }} noRemoteVideoView={<div>No one is sharing his video</div>} />
-                    <BackgroundBlurCheckbox />
+                    {/* <h1>VideoTileGrid</h1> */}
+                    {/* {isVideoEnabled ? 'LocalVideo is enabled' : 'LocalVideo is disabled'} */}
+                    {/* <button onClick={toggleVideo}>Toggle video</button> */}
+                    <div style={{ padding: '1rem', height: '70vh', width: '100vw', boxSizing: 'border-box' }}>
+                      <VideoTileGrid layout={'featured'} style={{ height: "100%" }} noRemoteVideoView={<div>No one is sharing his video</div>} />
+                    </div>
+                    {/* <div style={{ padding: '1rem', height: '70vh', boxSizing: 'border-box' }}>
+                      <VideoTileGrid layout='standard'
+                        className="videos">
+                      </VideoTileGrid>
+                    </div> */}
+                    <div style={{ flex: 1, display: 'grid' }}>
+                      <ControlBar>
+                        <BrowserView>
+                          <ContentShare />
+                          <button onClick={toggleContentShare}>Toggle content share</button>
+                        </BrowserView>
+                        <VideoInputControl />
+                        <AudioOutputControl />
+                        <AudioInputControl />
+                        {/* <AudioInputVFControl /> */}
+                        {/* <BackgroundBlurCheckbox /> */}
+                      </ControlBar>
+                    </div>
                   </div>
-                  <DeviceSetup />
+                  {/* <DeviceSetup /> */}
                 </BackgroundBlurProvider>) : null}
             </div>}
         </div>
